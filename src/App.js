@@ -1,17 +1,8 @@
-import logo from './logo.svg';
+import ResultsScreen from './screens/ResultScreen.js';
+import React, { useState, useEffect } from 'react';
+
 import './App.css';
 
-/*
-Create a bunch of dummy data and list them and show them in a list
-*/
-
-/*
-shift: can be either "D" "N", 0 or 1.
-englishLevel: 1-5 -> maps to e.g. profiient, not etc.
-location: a string
-*/
-
-//Object.keys(<object name>)
 
 const jobRequirements = {
   walmart: {
@@ -71,90 +62,84 @@ const jobRequirements = {
   
 };
 
-const Result = ({job}) => {
+const criteria = ["englishLevel", "location",  "shift", "sector"];
+
+
+const Field = ({question, query, setQuery}) => {
+  function handleChange (e) {
+    setQuery(Object.assign(query, {[question]: e.target.value}));
+  }
+
   return (
-    <div style={{
-          height: 50,
-          borderColor: 'transparent',
-          margin: "0 auto", 
-          marginRight: 30,
-          marginBottom: '20px',
-          justifyContent: 'center', 
-          alignItems: 'center',
-          borderRadius: 20,
-          backgroundColor: '#007cba',
-          boxShadow: '5px 5px 3px 3px rgba(0,0,0,0.2)',
-          }}>
-            <br></br>
-            <div style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
-              {job.company}: {job.location}, {job.shift == 0 ? "Day" : "Night"}
-            </div>
+    <div className="field">
+      <div className="question">{question}</div>
+      <input type="text" className="answer" placeholder="Type something..." onChange={handleChange}></input>
     </div>
   )
 }
 
-const ScrollableListings = () => {
-  return (
-  <div className="style-2">
-    {Object.values(jobRequirements).map((job)=> {
-        return (
-          <Result job={job}/>
-        )
-      })}
-  </div>
-  )
-}
+const SearchScreen = ({results, setResults, page, setPage}) => {
+  const [query, setQuery] = useState({});
 
-const Listings = () => {
+  useEffect(()=> {
+    criteria.map(question => {
+      setQuery(Object.assign(query, {[question]: ""}))
+    })
+    console.log(query);
+    return;
+  },[]);
+
+  function handleSubmit () {
+    
+    let searchResults = {};
+    for (let i in criteria) {
+      let que = query[[criteria[i]]];
+      if (que != "") {
+        let entries = Object.entries(jobRequirements);
+        for (const [key, value] in entries) {
+          let title = entries[key][0];
+          let content = jobRequirements[entries[key][0]];
+          if (que == content[criteria[i]]) {
+            Object.assign(searchResults, {[title]: content});
+          }
+        }
+      }
+    }
+    setResults(searchResults);
+    setPage("ResultsScreen");
+  }
+
+
   return (
-    <div className="Listings" style={{
-      margin: '0 auto',
-      backgroundColor: 'white', 
-      width: '50vw',
-      padding: 20,
-      borderRadius: 30,
-      borderColor: 'transparent',
-      boxShadow: '10px 10px 5px 5px rgba(0,0,0,0.2)',
-    }}>
-      
+    <div className="search-screen">
+      <div className="banner">
+        World Relief Job Match
+      </div>
+      <div className="white-box">
+          {criteria.map(question => <Field question={question} setQuery={setQuery} query={query} key={question}/>)}
+      </div>
+      <div onClick={handleSubmit} className="submit-button">Submit</div>
     </div>
   )
 }
-const Banner = () => {
-  
-  
-  return (
-    <div style={{textAlign: 'center', fontSize: 100, marginBottom: 30, marginTop: 30}}>
-      Results
-    </div>
-  )
-  
-  
-}
 
-const Reset = () => {
-  return (
-    <div className="Reset" style={{marginTop: 50}}>Reset</div>
-  )
-}
 
 
 function App() {
+  const [page, setPage] = useState("SearchScreen");
+  const [results, setResults] = useState(jobRequirements);
+
+  function backToSearch () {
+    setPage("SearchScreen");
+  }
+
+  const screens = {
+    "SearchScreen": <SearchScreen results={results} setResults={setResults} page={page} setPage={setPage}></SearchScreen>,
+    "ResultsScreen":  <ResultsScreen jobRequirements={results} back={backToSearch}></ResultsScreen>,
+  }
+
   return (
-    <div className="App" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-      <Banner></Banner>
-      <div style={{margin: '0 auto',
-      backgroundColor: 'white', 
-      width: '50vw',
-      padding: 20,
-      borderRadius: 30,
-      borderColor: 'black',
-    
-      boxShadow: '10px 10px 5px 5px rgba(0,0,0,0.2)',}}>
-      <ScrollableListings></ScrollableListings>
-      </div>
-      <Reset></Reset>
-    </div>
+    screens[page]
   );
 }
 

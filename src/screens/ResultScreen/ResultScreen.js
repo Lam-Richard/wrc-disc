@@ -6,7 +6,6 @@ import ScrollableListings from './components/scrollableListings';
 
 const ResultScreen = ({jobRequirements, back}) => {
   const [modal, setModal] = useState(null);
-
   return (
     <div className="resultscreen">
       { modal 

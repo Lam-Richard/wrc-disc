@@ -1,4 +1,4 @@
-.reset {
+.resets {
     display: flex;
     height: 40px;
     width: 120px;
@@ -10,6 +10,18 @@
     border-radius: 10px;
     border: 'solid transparent 5px';
     font-size: 30px;
+}
+
+.reset {
+    margin: 0px auto;
+    margin-top: 50px;
+    width: 10vw;
+    height: 5vh;
+    border: 1px solid black;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .reset:hover {

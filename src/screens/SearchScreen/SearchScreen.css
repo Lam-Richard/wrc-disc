@@ -1,0 +1,49 @@
+.search-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    width: 100vw;
+    height: 100vh;
+  }
+
+.banner {
+    width: 60%;
+    height: 10%;
+    margin-bottom: 2.5%;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 500%;
+}
+
+  
+
+.white-box {
+    background-color: 'white'; 
+    padding: 20px;
+    border-radius: 30px;
+    border-color: black;
+    box-shadow: 10px 10px 5px 5px rgba(0,0,0,0.2);
+    width: 50%;
+    height: 50%;
+  }
+
+
+.submit-button {
+    margin: 0px auto;
+    margin-top: 3%;
+    width: 10%;
+    height: 5%;
+    border: 1px solid black;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-button:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}

@@ -6,9 +6,9 @@ const ScrollableListings = ({jobRequirements, modal, setModal}) => {
     return (
     <div className="scroll-box">
       <br></br>
-      {Object.values(jobRequirements).map((job)=> {
+      {Object.values(jobRequirements).map((job, index)=> {
           return (
-            <Result modal={modal} setModal={setModal} job={job} key={job}/>
+            <Result modal={modal} setModal={setModal} job={job} key={index}/>
           )
         })}
     </div>

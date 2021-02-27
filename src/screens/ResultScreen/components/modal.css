@@ -15,14 +15,15 @@
     height: 60%;
     background-color: white;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
     z-index: 10;
   }
 
   .modal-close {
-    width: 10%;
-    height: 5%;
+    width: 15%;
+    height: 10%;
     background-color: green;
     display: flex;
     justify-content: center;

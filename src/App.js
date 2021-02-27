@@ -9,9 +9,26 @@ const Field = ({question, query, setQuery}) => {
     setQuery(Object.assign(query, {[question]: e.target.value}));
   }
 
+  function parseField (field) {
+    let fieldParsed = [];
+
+    for(let i = 0; i < field.length; i++) {
+      if (field[i] == field[i].toLowerCase()) {
+        fieldParsed.push(field[i]);
+      } else {
+        fieldParsed.push(" ");
+        fieldParsed.push(field[i]);
+      }
+    }
+
+    fieldParsed[0] = field[0].toUpperCase()
+    return fieldParsed.join("")
+  }
+
+
   return (
     <div className="field">
-      <div className="question">{question}</div>
+      <div className="question">{parseField(question)}</div>
         <input 
           type="text" 
           className="answer" 
@@ -39,22 +56,13 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
 
     // Error catching to prevent blank form submissions
     let blankSubmission = true;
-    for (let i in criteria) {
-      if (query[criteria[i]] != "") {
-        blankSubmission = false;
-        break;
-      }
-    }
-
-    if (blankSubmission) {
-      alert("You must enter data for at least one field.");
-      return
-    }
 
     // Loop over each criteria & if any category matches, add it to the results
     for (let i in criteria) {
       let que = query[[criteria[i]]];
       if (que != "") {
+        blankSubmission = false
+
         let entries = Object.entries(jobRequirements);
         for (const [key, value] in entries) {
           let title = entries[key][0];
@@ -78,8 +86,12 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
       }
     }
 
-    // Display search results (matching jobs)
-    setResults(searchResults);
+    if (blankSubmission) {
+      setResults(jobRequirements);
+    } else {
+      setResults(searchResults);
+    }
+
     setPage("ResultScreen");
   }
 
@@ -109,7 +121,7 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
 
 // Primary application handler; toggles between search & results pages as needed
 function App() {
-  const [page, setPage] = useState("SearchScreen");
+  const [page, setPage] = useState("ResultScreen");
   const [results, setResults] = useState(jobRequirements);
 
   function backToSearch () {

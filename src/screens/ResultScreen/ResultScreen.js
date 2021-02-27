@@ -4,6 +4,7 @@ import Banner from './components/banner';
 import Reset from './components/reset';
 import ScrollableListings from './components/scrollableListings';
 
+// Displays results (matching jobs) based on user search inputs
 const ResultScreen = ({jobRequirements, back}) => {
   const [modal, setModal] = useState(null);
 

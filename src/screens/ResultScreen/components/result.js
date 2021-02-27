@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from './modal';
 import './result.css';
 
+// Represents a single matching job, based on user search inputs
 const Result = ({job, modal, setModal}) => {
     const thisModal = <Modal job={job} setModal={setModal} modal={modal}></Modal>;
     return (

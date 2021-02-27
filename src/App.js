@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { jobRequirements, criteria } from './utils/data';
 import ResultScreen from './screens/ResultScreen/ResultScreen.js';
 
+// Input field for a given job characteristic
 const Field = ({question, query, setQuery}) => {
   function handleChange (e) {
     setQuery(Object.assign(query, {[question]: e.target.value}));
@@ -21,6 +22,7 @@ const Field = ({question, query, setQuery}) => {
   )
 }
 
+// Initial landing screen where user inputs job characteristics
 const SearchScreen = ({results, setResults, page, setPage}) => {
   const [query, setQuery] = useState({});
 
@@ -31,9 +33,25 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
     return;
   },[]);
 
+  // Go here once the user enters job data & searches for job matches
   function handleSubmit () {
-    
     let searchResults = {};
+
+    // Error catching to prevent blank form submissions
+    let blankSubmission = true;
+    for (let i in criteria) {
+      if (query[criteria[i]] != "") {
+        blankSubmission = false;
+        break;
+      }
+    }
+
+    if (blankSubmission) {
+      alert("You must enter data for at least one field.");
+      return
+    }
+
+    // Loop over each criteria & if any category matches, add it to the results
     for (let i in criteria) {
       let que = query[[criteria[i]]];
       if (que != "") {
@@ -41,12 +59,26 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
         for (const [key, value] in entries) {
           let title = entries[key][0];
           let content = jobRequirements[entries[key][0]];
-          if (que == content[criteria[i]]) {
-            Object.assign(searchResults, {[title]: content});
+
+          // Dispatch based on criteria (some don't need strict equality)
+          if (criteria[i] == "englishLevel") {
+            if (que >= content[criteria[i]]) {
+              Object.assign(searchResults, {[title]: content});
+            }
+          } else if (criteria[i] == "location" || criteria[i] == "sector") {
+            if (que.toLowerCase() == content[criteria[i]].toLowerCase()) {
+                  Object.assign(searchResults, {[title]: content});
+                }
+          } else {
+            if (que == content[criteria[i]]) {
+              Object.assign(searchResults, {[title]: content});
+            }
           }
         }
       }
     }
+
+    // Display search results (matching jobs)
     setResults(searchResults);
     setPage("ResultScreen");
   }
@@ -75,6 +107,7 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
   )
 }
 
+// Primary application handler; toggles between search & results pages as needed
 function App() {
   const [page, setPage] = useState("SearchScreen");
   const [results, setResults] = useState(jobRequirements);

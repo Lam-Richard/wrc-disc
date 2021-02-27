@@ -4,6 +4,7 @@
     location: a string
 */
 
+// Sample data to use for simulated search queries & job matching
 export const jobRequirements = {
     walmart: {
       company: 'Walmart',

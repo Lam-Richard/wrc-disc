@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './modal.css';
 
+// Modal window to display information about a specific job
 const Modal = ({job, modal, setModal}) => {
 
     return (  

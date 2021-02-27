@@ -1,0 +1,38 @@
+.modal {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+  }
+
+  .modal-content {
+    width: 50%;
+    height: 60%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 10;
+  }
+
+  .modal-close {
+    width: 10%;
+    height: 5%;
+    background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px black;
+    border-radius: 20px;
+    z-index: 10;
+  }
+
+  .modal-close:hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }

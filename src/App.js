@@ -1,69 +1,7 @@
-import ResultsScreen from './screens/ResultScreen.js';
-import React, { useState, useEffect } from 'react';
-
 import './App.css';
-
-
-const jobRequirements = {
-  walmart: {
-    company: 'Walmart',
-    englishLevel: 3,
-    location: "Chicago",
-    shift: 0,
-    hourly: 13,
-    sector: 'retail',
-
-  },
-  cvs: {
-    company: 'CVS',
-    englishLevel: 4,
-    location: "Chicago",
-    shift: 0,
-    hourly: 12,
-    sector: 'healthcare',
-
-
-  },
-  walgreens: {
-    company: 'Walgreens',
-    englishLevel: 2,
-    location: "Evanston",
-    shift: 1,
-    hourly: 15,
-    sector: 'healthcare',
-  },
-  traderjoes: {
-    company: 'Trader Joes',
-    englishLevel: 5,
-    location: "Wilmette",
-    shift: 1,
-    hourly: 12,
-    sector: 'retail',
-
-  },
-  petsmart: {
-    company: 'Pet Smart',
-    englishLevel: 4,
-    location: "Chicago",
-    shift: 0,
-    hourly: 15,
-    sector: 'retail',
-
-
-  },
-  starbucks: {
-    company: 'Starbucks',
-    englishLevel: 3,
-    location: "Chicago",
-    shift: 0,
-    hourly: 10,
-    sector: 'restaurant',
-  }
-  
-};
-
-const criteria = ["englishLevel", "location",  "shift", "sector"];
-
+import React, { useState, useEffect } from 'react';
+import { jobRequirements, criteria } from './utils/data';
+import ResultScreen from './screens/ResultScreen/ResultScreen.js';
 
 const Field = ({question, query, setQuery}) => {
   function handleChange (e) {
@@ -73,7 +11,12 @@ const Field = ({question, query, setQuery}) => {
   return (
     <div className="field">
       <div className="question">{question}</div>
-      <input type="text" className="answer" placeholder="Type something..." onChange={handleChange}></input>
+        <input 
+          type="text" 
+          className="answer" 
+          placeholder="Type something..." 
+          onChange={handleChange}>
+        </input>
     </div>
   )
 }
@@ -85,7 +28,6 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
     criteria.map(question => {
       setQuery(Object.assign(query, {[question]: ""}))
     })
-    console.log(query);
     return;
   },[]);
 
@@ -106,9 +48,8 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
       }
     }
     setResults(searchResults);
-    setPage("ResultsScreen");
+    setPage("ResultScreen");
   }
-
 
   return (
     <div className="search-screen">
@@ -116,14 +57,23 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
         World Relief Job Match
       </div>
       <div className="white-box">
-          {criteria.map(question => <Field question={question} setQuery={setQuery} query={query} key={question}/>)}
+          {criteria.map(question => 
+            <Field 
+              question={question} 
+              setQuery={setQuery} 
+              query={query} 
+              key={question}
+            />
+          )}
       </div>
-      <div onClick={handleSubmit} className="submit-button">Submit</div>
+      <div
+        onClick={handleSubmit} 
+        className="submit-button">
+          Submit
+      </div>
     </div>
   )
 }
-
-
 
 function App() {
   const [page, setPage] = useState("SearchScreen");
@@ -134,8 +84,18 @@ function App() {
   }
 
   const screens = {
-    "SearchScreen": <SearchScreen results={results} setResults={setResults} page={page} setPage={setPage}></SearchScreen>,
-    "ResultsScreen":  <ResultsScreen jobRequirements={results} back={backToSearch}></ResultsScreen>,
+    "SearchScreen": 
+      <SearchScreen 
+        results={results} 
+        setResults={setResults} 
+        page={page} 
+        setPage={setPage}>
+      </SearchScreen>,
+    "ResultScreen":  
+      <ResultScreen 
+        jobRequirements={results} 
+        back={backToSearch}> 
+      </ResultScreen>,
   }
 
   return (

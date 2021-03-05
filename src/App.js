@@ -57,35 +57,58 @@ const SearchScreen = ({results, setResults, page, setPage}) => {
     // Error catching to prevent blank form submissions
     let blankSubmission = true;
 
-    // Loop over each criteria & if any category matches, add it to the results
+    // Determine non-empty input fields
+    let nonEmpty = []
+
     for (let i in criteria) {
       let que = query[[criteria[i]]];
       if (que != "") {
-        blankSubmission = false
-
-        let entries = Object.entries(jobRequirements);
-        for (const [key, value] in entries) {
-          let title = entries[key][0];
-          let content = jobRequirements[entries[key][0]];
-
-          // Dispatch based on criteria (some don't need strict equality)
-          if (criteria[i] == "englishLevel") {
-            if (que >= content[criteria[i]]) {
-              Object.assign(searchResults, {[title]: content});
-            }
-          } else if (criteria[i] == "location" || criteria[i] == "sector") {
-            if (que.toLowerCase() == content[criteria[i]].toLowerCase()) {
-                  Object.assign(searchResults, {[title]: content});
-                }
-          } else {
-            if (que == content[criteria[i]]) {
-              Object.assign(searchResults, {[title]: content});
-            }
-          }
-        }
+        nonEmpty.push(criteria[i]);
       }
     }
 
+    // Determine if form submission was blank
+    if (nonEmpty.length != 0) {
+      blankSubmission = false
+    }
+
+    // Loop over each criteria & if all categories match, add to results
+    let entries = Object.entries(jobRequirements);
+    for (const [key, value] in entries) {
+      let title = entries[key][0];
+      let content = jobRequirements[entries[key][0]];
+
+      let passed = true;
+      for (let i in nonEmpty) {
+        let que = query[[nonEmpty[i]]]
+        let jobField = content[[nonEmpty[i]]]
+
+        // Dispatch based on criteria (some don't need strict equality)
+        if (nonEmpty[i] == "englishLevel") {
+          if (que < jobField) {
+            passed = false;
+            break;
+          }
+        } else if (que == "location" || que == "sector") {
+          if (que.toLowerCase() != jobField.toLowerCase()) {
+            passed = false;
+            break;
+          }
+        } else {
+          if (que != jobField) {
+            passed = false;
+            break;
+          }
+        }
+      }
+
+      // Only add job if it matches all input fields
+      if (passed) {
+        Object.assign(searchResults, {[title]: content});
+      }
+    }
+
+    // Dispatch based on whether form submission was blank or not
     if (blankSubmission) {
       setResults(jobRequirements);
     } else {
